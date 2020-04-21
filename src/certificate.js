@@ -5,13 +5,13 @@ import './main.css'
 import { PDFDocument, StandardFonts } from 'pdf-lib'
 import QRCode from 'qrcode'
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
-import { faEye, faFilePdf } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faFilePdf, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import './check-updates'
 import { $, $$ } from './dom-utils'
 import pdfBase from './certificate.pdf'
 
-library.add(faEye, faFilePdf)
+library.add(faEye, faFilePdf, faTimes)
 
 dom.watch()
 
@@ -57,23 +57,67 @@ function setReleaseDateTime () {
 }
 
 function saveProfile () {
+  const profile = {}
   for (const field of $$('#form-profile input')) {
     if (field.id === 'field-datesortie') {
       var dateSortie = field.value.split('-')
-      localStorage.setItem(field.id.substring('field-'.length), `${dateSortie[2]}/${dateSortie[1]}/${dateSortie[0]}`)
+      profile[field.id.substring('field-'.length)] = `${dateSortie[2]}/${dateSortie[1]}/${dateSortie[0]}`
     } else {
-      localStorage.setItem(field.id.substring('field-'.length), field.value)
+      profile[field.id.substring('field-'.length)] = field.value
     }
   }
+  setProfile(profile)
+}
+
+function clearProfile () {
+  localStorage.removeItem('profile')
+}
+
+function setProfile (profile) {
+  localStorage.setItem('profile', JSON.stringify(profile))
 }
 
 function getProfile () {
-  const fields = {}
-  for (let i = 0; i < localStorage.length; i++) {
-    const name = localStorage.key(i)
-    fields[name] = localStorage.getItem(name)
+  return JSON.parse(localStorage.getItem('profile'))
+}
+
+function getHistoryProfiles () {
+  let history = { profiles: [] }
+  if (localStorage.getItem('history')) {
+    history = JSON.parse(localStorage.getItem('history'))
   }
-  return fields
+  return history.profiles
+}
+
+function addProfileToHistory (profile) {
+  const profiles = getHistoryProfiles()
+  profiles.push(profile)
+  setProfilesHistory(profiles)
+}
+
+function removeProfileFromHistory (profileId) {
+  const profiles = getHistoryProfiles()
+  profiles.splice(profileId, 1)
+  setProfilesHistory(profiles)
+}
+
+function setProfilesHistory (profiles) {
+  localStorage.setItem('history', JSON.stringify({ profiles: profiles }))
+}
+
+function displayHistoryProfiles () {
+  const table = $('#profile-history table tbody')
+  let html = ''
+  table.innerHTML = html
+  const profiles = getHistoryProfiles()
+  for (let i = 0; i < profiles.length; i++) {
+    const profile = profiles[i]
+
+    html += `<tr><td>${profile.firstname} ${profile.lastname}</td>` +
+    `<td><button class="generate-attestation btn btn-sm btn-primary" data-id="${i}">Attestation</button></td>` +
+    `<td><button class="remove-profile btn btn-sm btn-danger" data-id="${i}">X</button></td></tr>`
+  }
+  table.innerHTML = html
 }
 
 function idealFontSize (font, text, maxWidth, minSize, defaultSize) {
@@ -187,13 +231,25 @@ async function generatePdf (profile, reasons) {
   return new Blob([pdfBytes], { type: 'application/pdf' })
 }
 
-function downloadBlob (blob, fileName) {
+function downloadPdf (blob) {
+  const creationDate = new Date().toLocaleDateString('fr-CA')
+  const creationHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', '-')
+  const filename = `attestation-${creationDate}_${creationHour}.pdf`
+
   const link = document.createElement('a')
   var url = URL.createObjectURL(blob)
   link.href = url
-  link.download = fileName
+  link.download = filename
   document.body.appendChild(link)
   link.click()
+
+  snackbar.classList.remove('d-none')
+  setTimeout(() => snackbar.classList.add('show'), 100)
+
+  setTimeout(function () {
+    snackbar.classList.remove('show')
+    setTimeout(() => snackbar.classList.add('d-none'), 500)
+  }, 6000)
 }
 
 function getAndSaveReasons () {
@@ -202,6 +258,10 @@ function getAndSaveReasons () {
     .join('-')
   localStorage.setItem('reasons', values)
   return values
+}
+
+function clearReasons () {
+  localStorage.removeItem('reasons')
 }
 
 // see: https://stackoverflow.com/a/32348687/1513045
@@ -239,18 +299,17 @@ $('#generate-btn').addEventListener('click', async event => {
   saveProfile()
   const reasons = getAndSaveReasons()
   const pdfBlob = await generatePdf(getProfile(), reasons)
-  localStorage.clear()
-  const creationDate = new Date().toLocaleDateString('fr-CA')
-  const creationHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', '-')
-  downloadBlob(pdfBlob, `attestation-${creationDate}_${creationHour}.pdf`) 
 
-  snackbar.classList.remove('d-none')
-  setTimeout(() => snackbar.classList.add('show'), 100)
+  const profile = getProfile()
+  // The reasons are not integrated to the profile : add it in the history one to re-use it for PDF generation.
+  profile.reasons = reasons
 
-  setTimeout(function () {
-    snackbar.classList.remove('show')
-    setTimeout(() => snackbar.classList.add('d-none'), 500)
-  }, 6000)
+  addProfileToHistory(profile)
+  displayHistoryProfiles()
+  clearProfile()
+  clearReasons()
+
+  downloadPdf(pdfBlob)
 })
 
 $$('input').forEach(input => {
@@ -320,7 +379,34 @@ Object.keys(conditions).forEach(field => {
   })
 })
 
+$('#profile-history').addEventListener('click', async event => {
+  if (event.target.closest('.generate-attestation')) {
+    const elt = event.target
+    const id = elt.getAttribute('data-id')
+    const profiles = getHistoryProfiles()
+
+    const profile = profiles[id]
+
+    const creationDate = new Date().toLocaleDateString('fr-FR')
+    const creationHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', '-')
+
+    profile.datesortie = creationDate
+    profile.heuresortie = creationHour
+
+    const pdfBlob = await generatePdf(profile, profile.reasons)
+    downloadPdf(pdfBlob)
+  }
+
+  if (event.target.closest('.remove-profile')) {
+    const elt = event.target
+    const id = elt.getAttribute('data-id')
+    removeProfileFromHistory(id)
+    displayHistoryProfiles()
+  }
+}, false)
+
 function addVersion () {
   document.getElementById('version').innerHTML = `${new Date().getFullYear()} - ${process.env.VERSION}`
 }
 addVersion()
+displayHistoryProfiles()

@@ -18,7 +18,7 @@ body {
   margin: 20px;
 }
 
-form, #alert-print {
+form, #alert-print, #profile-history {
     margin: 30px auto;
     max-width: 400px;
 }
@@ -188,7 +188,15 @@ input:valid+span:after {
   color: #000000;
 }
 
+.btn-primary {
+  background-color: #000191;
+  border-color: #000191;
+}
 
+.btn-danger {
+  background-color: #e1000f;
+  border-color: #e1000f;
+}
 
 .btn-attestation {
   padding: 0.9em;
