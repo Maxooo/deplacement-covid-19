@@ -52,11 +52,11 @@
 
     <div class="wrapper">
         <div id="profile-history">
-            <h2 class="titre-2">Réutilisez un profil précédemment créé</h2>
-            
-            <table class="table table-striped">
-                <tbody></tbody>
-            </table>
+            <h2 class="titre-2">Réutilisez une attestation précédemment créée</h2>
+            <div class="message"></div>
+            <div class="profiles"></div>
+            <ul class="profiles list-group list-group-flush">
+            </ul>
         </div>
 
         <form id="form-profile" accept-charset="UTF-8">
@@ -79,7 +79,6 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
             <div class="form-group">
@@ -98,7 +97,6 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
             <div class="form-group">
@@ -119,7 +117,6 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
             <div class="form-group">
@@ -136,7 +133,6 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
             <div class="form-group">
@@ -154,7 +150,6 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
             <div class="form-group">
@@ -172,10 +167,9 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
             
-            <div class="form-group">
+            <div class="form-group mb-5">
                 <label for="field-zipcode" id="field-zipcode-label" >Code Postal</label>
                 <div class="input-group  align-items-center">
                     <input
@@ -196,9 +190,8 @@
                     >
                     <span class="validity" aria-hidden="true"></span>
                 </div>
-                <p class="exemple"></p>
             </div>
-            
+
             <fieldset>
                 <legend class="title-3">Choisissez le ou les motif(s) de sortie</legend>
                 <div class="form-check">
@@ -235,7 +228,7 @@
                 </div>
             </fieldset>
             
-            <div class="form-group">
+            <div class="form-group mt-5">
                 <label for="field-datesortie">Date de sortie</label>
                 <div class="input-group  align-items-center">
                     <input type="date" class="form-control" id="field-datesortie" name="datesortie" autocomplete="off" placeholder="JJ/MM/YYYY" aria-invalid="true" required>
