@@ -92,6 +92,7 @@ a {
   top: 20px;
   left: 20px;
   right: 20px;
+  z-index: 9999;
 }
 
 #alert-print {
@@ -408,4 +409,27 @@ input:valid+span:after {
   bottom: 1em;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.alert {
+  border-radius: 0;
+}
+.alert-light {
+  color: #000000;
+  background-color: #f5f5f5;
+  border-color: #f5f5f5;
+}
+
+.alert-danger {
+  color: white;
+  background-color: #e1000f;
+  border-color: #e1000f;
+}
+
+#important-information h5, a {
+  color: #e1000f;
+}
+
+#important-information a:hover {
+  color: #fb0011;
 }

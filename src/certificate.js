@@ -294,7 +294,7 @@ function isFacebookBrowser () {
 }
 
 if (isFacebookBrowser()) {
-  $('#alert-facebook').value = 'ATTENTION !! Vous utilisez actuellement le navigateur Facebook, ce générateur ne fonctionne pas correctement au sein de ce navigateur ! Merci d\'ouvrir Chrome sur Android ou bien Safari sur iOS.'
+  $('#alert-facebook').innerHTML = 'ATTENTION !! Vous utilisez actuellement le navigateur Facebook, ce générateur ne fonctionne pas correctement au sein de ce navigateur ! Merci d\'ouvrir Chrome sur Android ou bien Safari sur iOS.'
   $('#alert-facebook').classList.remove('d-none')
 }
 

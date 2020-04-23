@@ -30,7 +30,6 @@
 </head>
 <body>
     <header role="banner" class="wrapper">
-        <img class="logo" src="/MIN_Interieur_RVB.svg" alt="Ministère de l'intérieur. Liberté, égalité, fraternité.">
         <div>
             <h1 class="flex flex-wrap">
                 <span class="covid-title">
@@ -48,9 +47,18 @@
         </div>
     </header>
     <main role="main">
-    <p class="alert  alert-danger  d-none" role="alert" id="alert-facebook"></p>
-
+    <p class="alert alert-danger d-none" role="alert" id="alert-facebook"></p>
     <div class="wrapper">
+        <div id="important-information" class="alert alert-light">
+            <h5>Information importante</h5>
+            <p>
+                Ce service est mis à disposition afin de simplifier l'utilisation de la <a href="https://media.interieur.gouv.fr/deplacement-covid-19/">plateforme initiale et officielle</a> mis à disposition par l'Etat Français.<br />
+                Ce dernier se base sur le <a href="https://github.com/LAB-MI/deplacement-covid-19">code source de l'application officielle</a> dont les modifications apportées restent disponibles sur <a href="https://github.com/Maxooo/deplacement-covid-19">github</a>.<br />
+                Dans la mesure du possible et pour le bien de toutes et de tous, limitez vos déplacements.<br />
+                Prenez soin de vous. 🖖
+            </p>
+        </div>
+
         <div id="profile-history">
             <h2 class="titre-2">Réutilisez une attestation précédemment créée</h2>
             <div class="message"></div>
@@ -249,14 +257,14 @@
                 <button type="button" id="generate-btn" class="btn btn-primary btn-attestation"><span ><i class="fa fa-file-pdf inline-block mr-1"></i>  Générer mon attestation</span></button>
             </p>
 
-            <div class="bg-primary  d-none" id="snackbar">
+            <div class="bg-primary d-none" id="snackbar">
               L'attestation est téléchargée sur votre appareil.
             </div>
         </form>
     </div>
     <div class="">
         <p class="github">
-            Le code source de ce service est consultable sur <a href="https://github.com/LAB-MI/deplacement-covid-19" class="github-link">Github</a>.
+            Le code source de ce service est consultable sur <a href="https://github.com/Maxooo/deplacement-covid-19" class="github-link">Github</a>.
         </p>
         <p class="label-mi">
             Ministère de l'Intérieur - DNUM - SDIT
@@ -274,7 +282,7 @@
         </div>
     </footer> 
 
-    <div class="alert  alert-info  d-none" id="update-alert">
+    <div class="alert alert-info d-none" id="update-alert">
         Une nouvelle version est disponible. Cliquer sur le bouton pour l'obtenir.
         <p class="text-right">
             <button id="reload-btn" class="btn  btn-info">Mettre à jour</button>
