@@ -404,7 +404,7 @@ Object.keys(conditions).forEach(field => {
 
 $('#profile-history').addEventListener('click', async event => {
   if (event.target.closest('.generate-attestation')) {
-    const elt = event.target
+    const elt = event.target.closest('.generate-attestation')
     const id = elt.getAttribute('data-id')
     const profiles = getHistoryProfiles()
 
@@ -421,7 +421,7 @@ $('#profile-history').addEventListener('click', async event => {
   }
 
   if (event.target.closest('.remove-profile')) {
-    const elt = event.target
+    const elt = event.target.closest('.remove-profile')
     const id = elt.getAttribute('data-id')
     removeProfileFromHistory(id)
     displayHistoryProfiles()

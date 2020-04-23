@@ -189,6 +189,10 @@ input:valid+span:after {
   color: #000000;
 }
 
+.btn {
+  border-radius: 2px;
+} 
+
 .btn-primary {
   background-color: #000191;
   border-color: #000191;
@@ -409,10 +413,11 @@ input:valid+span:after {
   bottom: 1em;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 9999;
 }
 
 .alert {
-  border-radius: 0;
+  border-radius: 2px;
 }
 .alert-light {
   color: #000000;
@@ -424,6 +429,12 @@ input:valid+span:after {
   color: white;
   background-color: #e1000f;
   border-color: #e1000f;
+}
+
+.alert-info {
+  color: white;
+  background-color: #000191;
+  border-color: #000191;
 }
 
 #important-information h5, a {

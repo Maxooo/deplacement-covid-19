@@ -1,5 +1,8 @@
 FROM node:10
 
+ENV PUBLIC_URL /
+ENV VERSION "v1.0.2"
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -8,6 +11,7 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN ls -al
 RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production
@@ -15,6 +19,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 1234
+RUN npm run build
 
-CMD [ "npm", "start" ]
+EXPOSE 5000
+
+CMD [ "npm", "run", "serve" ]
