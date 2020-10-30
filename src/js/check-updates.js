@@ -1,12 +1,13 @@
 import { $ } from './dom-utils'
 
 // Ce fichier est généré au build par le plugin parcel-plugin-sw-cache
-const swName = './sw.js'
+const swName = '../sw.js'
 window.isUpdateAvailable = new Promise(function (resolve, reject) {
   // lazy way of disabling service workers while developing
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(swName)
-      .then(registration => {
+    navigator.serviceWorker
+      .register(swName)
+      .then((registration) => {
         registration.onupdatefound = () => {
           const installingWorker = registration.installing
           installingWorker.onstatechange = () => {
@@ -24,11 +25,11 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
           }
         }
       })
-      .catch(err => console.error('[SW ERROR]', err))
+      .catch((err) => console.error('[SW ERROR]', err)) // eslint-disable-line no-console
   }
 })
 
-window.isUpdateAvailable.then(isAvailable => {
+window.isUpdateAvailable.then((isAvailable) => {
   $('#reload-btn').addEventListener('click', () => window.location.reload())
   $('#update-alert').classList.remove('d-none')
 })
